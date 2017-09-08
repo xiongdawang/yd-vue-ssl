@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>点赞</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body {
+		height: 100%;
+		margin: 0;
+	}
+	div {
+		box-sizing: border-box;
+	}
+	.hand {
+		position: relative;
+		top: 200px;
+		left: 200px;
+		width: 150px;
+		height: 197px;
+		border-top-left-radius: 25px;
+		border-bottom-left-radius: 25px;
+		border-top: 1px solid #cb9172;
+		border-bottom: 1px solid #cb9172;
+		border-left: 1px solid #cb9172;
+		background: #f3c5ad;
+	}
+	.hand::before {
+		content: "";
+		position: absolute;
+		top: 25px;
+		left: -80px;
+		width: 100px;
+		height: 150px;
+		border-top: 1px solid #cb9172;
+		background: inherit;
+	}
+	.finger1:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: -1px;
+		width: 50px;
+		height: 50px;
+		border-top-left-radius: 25px;
+		border-top-right-radius: 25px;
+		/*border-top: 1px solid #cb9172;*/
+		border-left: 1px solid #cb9172;
+		/*border-bottom: 1px solid #cb9172;*/
+		box-shadow: 0 0 2px 2px #f3c5ad inset;
+		background: -webkit-linear-gradient(bottom, #f3c5ad, #f7ded0);
+		box-sizing: border-box;
+	}
+	.finger1:after {
+		content: "";
+		position: absolute;
+		top: 50px;
+		left: 3px;
+		width: 44px;
+		height: 25px;
+		border-top-left-radius: 25px;
+		border-top-right-radius: 25px;
+		background: -webkit-linear-gradient(bottom, #f3c5ad, #EAB499);
+	}
+	.finger1 {
+		position: absolute;
+		top: -100px;
+		left: 25px;
+		width: 50px;
+		height: 100px;
+		border-top-left-radius: 25px;
+		border-top-right-radius: 25px;
+		border-top: 1px solid #cb9172;
+		border-left: 1px solid #cb9172;
+		background: inherit;
+		transform: rotate(30deg);
+		transform-origin: left bottom;
+	}
+	.shade {
+		position: absolute;
+		right: -25px;
+		width: 50px;
+		height: 50px;
+		border-top-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		border-top: 1px solid #cb9172;
+		border-right: 1px solid #cb9172;
+		border-bottom: 1px solid #cb9172;
+		box-shadow: 0 0 2px 2px #f3c5ad inset;
+
+		background: -webkit-linear-gradient(left, #f3c5ad, #f7ded0);
+	}
+	.finger2 {
+		top: -1px;
+		/*transform: rotate(90deg);*/
+	}
+	.finger3 {
+		top: 48px;
+		/*transform: rotate(90deg);*/
+	}
+	.finger4 {
+		top: 97px;
+		/*transform: rotate(90deg);*/
+	}
+	.finger5 {
+		top: 146px;
+		/*transform: rotate(90deg);*/
+	}
+	.add {
+		position: absolute;
+		left: 400px;
+		top: 100px;
+		font-size: 30px;
+		color: green;
+		opacity: 0;
+		transform: translate3d();
+	}
+	.on {
+		animation: slideInOut 1s;
+	}
+	@keyframes slideInOut {
+		50% {
+			opacity: 1;
+		}
+		100% {
+			top: 50px;
+		}
+	}
+	</style>
+</head>
+<body>
+
+	<div class="hand" id="hand">
+		<div class="finger1"></div>
+		<div class="finger2 shade"></div>
+		<div class="finger3 shade"></div>
+		<div class="finger4 shade"></div>
+		<div class="finger5 shade"></div>
+	</div>
+	<div class="add">+<span id="js-add-count">0</span></div>
+
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script type="text/javascript" src="/js/utils.js"></script>
+
+	<script type="text/javascript">
+		$(function() {
+			$('#hand').on("click", function() {
+				throttle(thumb);
+			});
+
+			function thumb() {
+				var num = $("#js-add-count").text();
+				num = add(num);
+				axios.post('/add', {id:1, num: num})
+					.then(function(response) {
+						console.log("response:",response.data);
+						if (response.data.code == 1) {
+							$("#js-add-count").html(response.data.num);
+							$(".add").addClass("on");
+							setTimeout(function() {
+								$(".add").removeClass("on");
+							}, 1000);
+						} else {
+							//alert(response.data.msg);
+						}
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			}
+		});
+
+	</script>
+</body>
+</html>
