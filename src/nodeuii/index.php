@@ -1,31 +1,58 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
-$id = $_POST['id'];
-$num = $_POST['num'];
-$code = 0;
+class praiseButton {
+	public $servername;
+	public $username;
+	public $password;
+	public $dbname;
+	public $con = "";
 
-//echo json_encode(array('id'=>$id, 'num'=>$num, 'code'=> $code));exit;
+	function __construct($servername, $username, $password, $dbname) {
+		$this->servername = $servername;
+		$this->username = $username;
+		$this->password = $password;
+		$this->dbname = $dbname;
+	}
 
-$con = mysqli_connect("localhost", "root", "");
-if (!$con) {
-	die('Could not connect: ' . mysqli_connect_error());
+	function getSql() {
+		try {
+			$dsn = "mysql:host=$this->servername;dbname=$this->dbname";
+			$this->con = new PDO($dsn, $this->username, $this->password);
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+		}
+	}
+
+	function updatesql($sql) {
+		if ($this->con == null) {
+			$this->getSql();
+		}
+		$res = $this->con->exec($sql);
+		$this->closesql();
+		return $res;
+	}
+
+	function cloasesql() {
+		$this->con = null;
+	}
 }
-mysqli_set_charset($con, "utf8");
-mysqli_select_db($con, "yd");
 
-$get_data = mysqli_query($con, "SELECT * FROM thumb WHERE id = " . $id);
+class realConn extends praiseButton {
+	function __construct($servername, $username, $password, $dbname) {
+		parent::__construct($servername, $username, $password, $dbname);
+	}
 
-$result = "";
-if ($get_data->num_rows) {
-	$arr = $get_data->fetch_assoc();
-	$result = mysqli_query($con, "UPDATE thumb SET num = " . $num . " WHERE id = " . $id);
-	$code = 1;
-} else {
-	$result = mysqli_query($con, "INSERT INTO thumb (id, num) VALUES ($id, $num)");
-	$code = 1;
+	function updateRealconn() {
+		$sql = "UPDATE thumb SET num = num + 1 WHERE id = 1";
+		$res = $this->updatesql($sql);
+		if ($res > 0) {
+			echo json_encode(array('success' => true, 'message' => '123'));
+		} else {
+			echo json_encode(array('success' => true, 'message' => '456'));
+		}
+	}
 }
 
-echo json_encode(array('id' => $id, 'num' => $num, 'code' => $code));
-
-mysqli_close($con);
+$praisecon = new realConn('localhost', 'root', '', 'yd');
+$praisecon->updateRealconn();

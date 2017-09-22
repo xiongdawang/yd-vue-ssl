@@ -15,8 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'src/webapp/public/js/**/*.js',
-        'test/**/*.spec.js'
+        'test/**/*.spec.es'
     ],
 
 
@@ -28,6 +27,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        'test/**/*.spec.es': ['webpack']
     },
 
 
@@ -65,6 +65,27 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    webpack: {
+      // karma watches the test entry points 
+      // (you don't need to specify the entry option) 
+      // webpack watches dependencies 
+ 
+      // webpack configuration 
+        devtool: 'inline-source-map',
+        module: {
+            loaders: [
+                {test: /\.es$/, exclude: [/node_modules/], loader: 'babel'}
+            ]
+        }
+    },
+ 
+    webpackMiddleware: {
+          // webpack-dev-middleware configuration 
+          // i. e. 
+          stats: 'errors-only'
+    }
+
   })
 }

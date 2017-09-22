@@ -1,11 +1,7 @@
-window.add = function(num) {
-	return Number(num) + 1;
-};
+const utils = {
+	add: function(num) {
+		return 1 + num;
+	}
+}
 
-window.throttle = function(fun) {
-	clearTimeout(fun.timer);
-	fun.timer = setTimeout(function() {
-		fun();
-	}, 600);
-};
-
+export default  utils;

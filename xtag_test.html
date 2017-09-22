@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>x-tag基本应用</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./src/webapp/public/css/index.css">
+	<script type="text/javascript" src="https://cdn.bootcss.com/x-tag/1.5.11/x-tag-core.js"></script>
+	<script type="text/javascript">
+	xtag.register('x-clock', {
+		lifecycle: {
+			created: function() {
+				console.log('created');
+			}
+		},
+		content: function() {/*
+			<div class="hand" id="hand">
+				<div class="finger1"></div>
+				<div class="finger2 shade"></div>
+				<div class="finger3 shade"></div>
+				<div class="finger4 shade"></div>
+				<div class="finger5 shade"></div>
+			</div>
+		*/},
+		methods: {
+			
+		},
+		events: {
+			tap: function() {
+				console.log('events');
+			}
+		}
+	});
+	</script>
+</head>
+<body>
+	<x-clock></x-clock>
+</body>
+</html>

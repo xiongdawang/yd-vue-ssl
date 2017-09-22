@@ -1,23 +1,22 @@
-// const rp = require('request-promise');
+'use strict';
 
-// describe("接口测试", () => {
-// 	it("点赞接口测试", async () => {
-// 		let addTest = (data) => {
-// 			return new Promise((resolve, reject) => {
-// 				rp({
-// 					method: 'POST',
-// 				    uri: 'http://localhost:3001/add',
-// 					headers: {
-// 						'Content-Type': 'application/json; charset=utf-8'
-// 					},
-// 				    form: data
-// 				})
-// 					.then(body => resolve(body))
-// 					.catch(error => reject(error));
-// 			})
-// 		};
-// 		let json = await addTest({id:1, num: 2});
-// 		expect(json.code).toBe(1);
-// 	})
-	
-// });
+var _supertest = require('supertest');
+
+var _supertest2 = _interopRequireDefault(_supertest);
+
+require('../../src/webapp/app.es');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function request() {
+  return (0, _supertest2.default)(app.listen());
+}
+
+describe('测试路由', function () {
+  it('点赞', function (done) {
+    request().get('/index/updata').expect('Content-Type', /json/).expect(200).end(function (err, res) {
+      if (res.data == 1) return done(err);
+      done();
+    });
+  });
+});
